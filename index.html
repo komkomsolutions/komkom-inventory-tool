@@ -3,1217 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>KomKom Inventory Management</title>
+    <title>KomKom Debug Test</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-        
-        .header {
+            font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
-            padding: 30px;
             text-align: center;
-            position: relative;
-            border-bottom: 3px solid #ffd700;
+            padding: 50px;
+            margin: 0;
         }
-        
-        .language-toggle {
-            position: absolute;
-            top: 20px;
-            right: 20px;
+        .test-button {
             background: #ffd700;
-            border: none;
             color: #1e3c72;
-            padding: 8px 15px;
-            border-radius: 20px;
+            border: none;
+            padding: 20px 40px;
+            border-radius: 25px;
+            font-size: 18px;
+            font-weight: bold;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
+            margin: 20px;
             transition: all 0.3s ease;
         }
-        
-        .language-toggle:hover {
+        .test-button:hover {
             background: #ffed4a;
             transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
         }
-        
-        .google-auth {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: #ffd700;
-            border: none;
-            color: #1e3c72;
-            padding: 8px 15px;
-            border-radius: 20px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
-        }
-        
-        .google-auth:hover {
-            background: #ffed4a;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 215, 0, 0.4);
-        }
-        
-        .auth-status {
-            font-size: 12px;
-            margin-top: 5px;
-        }
-        
-        h1 {
-            margin-bottom: 10px;
-            font-size: 2.5em;
-            font-weight: 300;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-        }
-        
-        .subtitle {
-            opacity: 0.9;
-            font-size: 1.1em;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-        }
-        
-        .komkom-logo {
-            position: absolute;
-            top: 50%;
-            left: 50px;
-            transform: translateY(-50%);
-            width: 40px;
-            height: 40px;
-            background: #ffd700;
-            border-radius: 50%;
+        .result {
+            margin-top: 30px;
+            font-size: 20px;
+            padding: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            min-height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
+        }
+        .logo {
+            width: 60px;
+            height: 60px;
+            background: #ffd700;
             color: #1e3c72;
-            font-size: 18px;
-        }
-        
-        .main-content {
-            padding: 30px;
-        }
-        
-        .toolbar {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 30px;
-            align-items: center;
-        }
-        
-        .search-box {
-            flex: 1;
-            min-width: 300px;
-            padding: 12px 20px;
-            border: 2px solid #e0e0e0;
-            border-radius: 25px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-        }
-        
-        .search-box:focus {
-            outline: none;
-            border-color: #ffd700;
-            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
-        }
-        
-        .btn {
-            padding: 12px 24px;
-            border: none;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
+            border-radius: 50%;
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            color: white;
-            border: 2px solid #ffd700;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(30, 60, 114, 0.3);
-            background: linear-gradient(135deg, #2a5298 0%, #1e3c72 100%);
-        }
-        
-        .btn-success {
-            background: #2ecc71;
-            color: white;
-        }
-        
-        .btn-success:hover {
-            background: #27ae60;
-            transform: translateY(-2px);
-        }
-        
-        .btn-warning {
-            background: #f39c12;
-            color: white;
-        }
-        
-        .btn-danger {
-            background: #e74c3c;
-            color: white;
-        }
-        
-        .btn-secondary {
-            background: #95a5a6;
-            color: white;
-        }
-        
-        .filter-section {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .filter-select {
-            padding: 10px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-            min-width: 150px;
-        }
-        
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .stat-card {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            border: 1px solid #dee2e6;
-        }
-        
-        .stat-value {
-            font-size: 2em;
-            font-weight: bold;
-            color: #2c3e50;
-            margin-bottom: 5px;
-        }
-        
-        .stat-label {
-            color: #6c757d;
-            font-size: 0.9em;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .inventory-grid {
-            background: white;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        
-        .grid-header {
-            background: #f8f9fa;
-            display: grid;
-            grid-template-columns: 1fr 100px 80px 80px 100px 120px 120px 120px 120px;
-            gap: 15px;
-            padding: 15px 20px;
-            font-weight: 600;
-            color: #495057;
-            border-bottom: 2px solid #dee2e6;
-        }
-        
-        .grid-row {
-            display: grid;
-            grid-template-columns: 1fr 100px 80px 80px 100px 120px 120px 120px 120px;
-            gap: 15px;
-            padding: 15px 20px;
-            border-bottom: 1px solid #e9ecef;
-            align-items: center;
-            transition: all 0.3s ease;
-        }
-        
-        .grid-row:hover {
-            background: #f8f9fa;
-            transform: translateX(5px);
-        }
-        
-        .grid-row.low-stock {
-            background: #fff3cd;
-            border-left: 4px solid #ffc107;
-        }
-        
-        .grid-row.out-of-stock {
-            background: #f8d7da;
-            border-left: 4px solid #dc3545;
-        }
-        
-        .item-name {
-            font-weight: 600;
-            color: #2c3e50;
-        }
-        
-        .category-tag {
-            background: #e3f2fd;
-            color: #1e3c72;
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 12px;
-            font-weight: 600;
-            border: 1px solid #ffd700;
-        }
-        
-        .stock-level {
-            font-weight: bold;
-        }
-        
-        .stock-level.low {
-            color: #f39c12;
-        }
-        
-        .stock-level.out {
-            color: #e74c3c;
-        }
-        
-        .stock-level.good {
-            color: #2ecc71;
-        }
-        
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.7);
-            z-index: 1000;
-            align-items: center;
             justify-content: center;
-        }
-        
-        .modal.show {
-            display: flex;
-        }
-        
-        .modal-content {
-            background: white;
-            border-radius: 15px;
-            padding: 30px;
-            max-width: 500px;
-            width: 90%;
-            max-height: 80vh;
-            overflow-y: auto;
-            position: relative;
-            animation: modalSlideIn 0.3s ease;
-        }
-        
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .modal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #e9ecef;
-        }
-        
-        .close-btn {
-            background: none;
-            border: none;
             font-size: 24px;
-            cursor: pointer;
-            color: #6c757d;
-            padding: 5px;
-        }
-        
-        .close-btn:hover {
-            color: #dc3545;
-        }
-        
-        .form-group {
+            font-weight: bold;
             margin-bottom: 20px;
-        }
-        
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #495057;
-        }
-        
-        .form-input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-        
-        .form-input:focus {
-            outline: none;
-            border-color: #ffd700;
-            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
-        }
-        
-        .form-actions {
-            display: flex;
-            gap: 15px;
-            justify-content: flex-end;
-            margin-top: 30px;
-        }
-        
-        .footer {
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
-            padding: 20px;
-            text-align: center;
-            border-top: 3px solid #ffd700;
-            color: white;
-            font-size: 14px;
-        }
-        
-        .footer-line {
-            margin: 5px 0;
-        }
-        
-        .empty-state {
-            text-align: center;
-            padding: 60px 20px;
-            color: #6c757d;
-        }
-        
-        .empty-state-icon {
-            font-size: 4em;
-            margin-bottom: 20px;
-            opacity: 0.3;
-        }
-        
-            @media (max-width: 768px) {
-            .toolbar {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .search-box {
-                min-width: 100%;
-            }
-            
-            .grid-header,
-            .grid-row {
-                grid-template-columns: 1fr 80px 100px;
-                font-size: 14px;
-            }
-            
-            .grid-header > *:nth-child(n+4),
-            .grid-row > *:nth-child(n+4) {
-                display: none;
-            }
-            
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .komkom-logo {
-                display: none;
-            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <div class="komkom-logo">KK</div>
-            <button class="google-auth" id="authBtn">
-                📊 <span id="authText">Connect Google Sheets</span>
-            </button>
-            <button class="language-toggle" onclick="toggleLanguage()">
-                <span id="langToggleText">Français</span>
-            </button>
-            
-            <h1 id="title">Inventory Management</h1>
-            <p class="subtitle" id="subtitle">Track your stock with precision and care</p>
-            <div class="auth-status" id="authStatus">Not connected to Google Sheets</div>
-        </div>
-        
-        <div class="main-content">
-            <!-- Statistics Cards -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-value" id="totalItems">0</div>
-                    <div class="stat-label" id="totalItemsLabel">Total Items</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="lowStockItems">0</div>
-                    <div class="stat-label" id="lowStockLabel">Low Stock</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="outOfStockItems">0</div>
-                    <div class="stat-label" id="outOfStockLabel">Out of Stock</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="totalValue">$0</div>
-                    <div class="stat-label" id="totalValueLabel">Total Value</div>
-                </div>
-            </div>
-            
-            <!-- Toolbar -->
-            <div class="toolbar">
-                <input type="text" class="search-box" id="searchBox" placeholder="Search inventory...">
-                <button class="btn btn-primary" onclick="openModal('addItem')">
-                    ➕ <span id="addItemBtn">Add Item</span>
-                </button>
-                <button class="btn btn-success" onclick="exportData()">
-                    📋 <span id="exportBtn">Export</span>
-                </button>
-            </div>
-            
-            <!-- Filters -->
-            <div class="filter-section">
-                <select class="filter-select" id="categoryFilter">
-                    <option value="" id="allCategoriesOption">All Categories</option>
-                </select>
-                <select class="filter-select" id="stockFilter">
-                    <option value="" id="allStockOption">All Stock Levels</option>
-                    <option value="good" id="goodStockOption">In Stock</option>
-                    <option value="low" id="lowStockOption">Low Stock</option>
-                    <option value="out" id="outOfStockOption">Out of Stock</option>
-                </select>
-            </div>
-            
-            <!-- Inventory Grid -->
-            <div class="inventory-grid">
-                <div class="grid-header">
-                    <div id="itemHeader">Item Name</div>
-                    <div id="categoryHeader">Category</div>
-                    <div id="quantityHeader">Quantity</div>
-                    <div id="minStockHeader">Min Stock</div>
-                    <div id="priceHeader">Price</div>
-                    <div id="supplierHeader">Supplier</div>
-                    <div id="enteredByHeader">Entered By</div>
-                    <div id="enteredDateHeader">Date Added</div>
-                    <div id="actionsHeader">Actions</div>
-                </div>
-                <div id="inventoryList">
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📦</div>
-                        <h3 id="emptyTitle">No inventory items yet</h3>
-                        <p id="emptyText">Add your first item to get started</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <div class="footer-line">© <span id="currentYear">2024</span> KomKom Solutions for <span id="businessName">[Your Business Name]</span></div>
-            <div class="footer-line" id="footerTagline">Knowledge with care. Technology with integrity.</div>
-        </div>
-    </div>
-
-    <!-- Add/Edit Item Modal -->
-    <div class="modal" id="itemModal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modalTitle">Add New Item</h3>
-                <button class="close-btn" onclick="closeModal()">&times;</button>
-            </div>
-            
-            <form id="itemForm">
-                <div class="form-group">
-                    <label class="form-label" id="nameLabel">Item Name</label>
-                    <input type="text" class="form-input" id="itemName" required>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label" id="categoryLabel">Category</label>
-                    <input type="text" class="form-input" id="itemCategory">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label" id="quantityLabel">Current Quantity</label>
-                    <input type="number" class="form-input" id="itemQuantity" min="0" required>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label" id="minStockLabel">Minimum Stock Level</label>
-                    <input type="number" class="form-input" id="itemMinStock" min="0" value="10">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label" id="priceLabel">Unit Price</label>
-                    <input type="number" class="form-input" id="itemPrice" step="0.01" min="0">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label" id="supplierLabel">Supplier</label>
-                    <input type="text" class="form-input" id="itemSupplier">
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label" id="enteredByLabel">Entered By</label>
-                    <input type="text" class="form-input" id="itemEnteredBy" required>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label" id="descriptionLabel">Description</label>
-                    <textarea class="form-input" id="itemDescription" rows="3"></textarea>
-                </div>
-                
-                <div class="form-actions">
-                    <button type="button" class="btn btn-secondary" onclick="closeModal()" id="cancelBtn">Cancel</button>
-                    <button type="submit" class="btn btn-primary" id="saveBtn">Save Item</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
+    <div class="logo">KK</div>
+    <h1>🧪 KomKom Solutions Debug Test</h1>
+    <p>Testing JavaScript functionality on GitHub Pages</p>
+    
+    <button class="test-button" id="testBtn1">Test Button 1</button>
+    <button class="test-button" id="testBtn2">Test Button 2</button>
+    <button class="test-button" id="testBtn3">Language Test</button>
+    
+    <div class="result" id="result">Click any button to test JavaScript...</div>
+    
     <script>
-        // Language translations
-        const translations = {
+        console.log('🚀 Script loaded successfully!');
+        
+        let testCount = 0;
+        let currentLang = 'en';
+        
+        const messages = {
             en: {
-                title: "Inventory Management",
-                subtitle: "Track your stock with precision and care",
-                authText: "Connect Google Sheets",
-                authConnected: "Connected to Google Sheets",
-                authStatus: "Not connected to Google Sheets",
-                authStatusConnected: "Connected to Google Sheets",
-                langToggleText: "Français",
-                totalItemsLabel: "Total Items",
-                lowStockLabel: "Low Stock",
-                outOfStockLabel: "Out of Stock",
-                totalValueLabel: "Total Value",
-                addItemBtn: "Add Item",
-                exportBtn: "Export",
-                allCategoriesOption: "All Categories",
-                allStockOption: "All Stock Levels",
-                goodStockOption: "In Stock",
-                lowStockOption: "Low Stock",
-                outOfStockOption: "Out of Stock",
-                itemHeader: "Item Name",
-                categoryHeader: "Category",
-                quantityHeader: "Quantity",
-                minStockHeader: "Min Stock",
-                priceHeader: "Price",
-                supplierHeader: "Supplier",
-                enteredByHeader: "Entered By",
-                enteredDateHeader: "Date Added",
-                actionsHeader: "Actions",
-                emptyTitle: "No inventory items yet",
-                emptyText: "Add your first item to get started",
-                footerTagline: "Knowledge with care. Technology with integrity.",
-                modalTitle: "Add New Item",
-                modalTitleEdit: "Edit Item",
-                nameLabel: "Item Name",
-                categoryLabel: "Category",
-                quantityLabel: "Current Quantity",
-                minStockLabel: "Minimum Stock Level",
-                priceLabel: "Unit Price",
-                supplierLabel: "Supplier",
-                enteredByLabel: "Entered By",
-                descriptionLabel: "Description",
-                cancelBtn: "Cancel",
-                saveBtn: "Save Item",
-                editBtn: "Edit",
-                deleteBtn: "Delete",
-                searchPlaceholder: "Search inventory..."
+                button1: '✅ Button 1 clicked! JavaScript is working.',
+                button2: '✅ Button 2 clicked! Events are working.',
+                langTest: '✅ Language switched to French!',
+                initial: 'Click any button to test JavaScript...'
             },
             fr: {
-                title: "Gestion d'Inventaire",
-                subtitle: "Suivez vos stocks avec précision et soin",
-                authText: "Connecter Google Sheets",
-                authConnected: "Connecté à Google Sheets",
-                authStatus: "Non connecté à Google Sheets",
-                authStatusConnected: "Connecté à Google Sheets",
-                langToggleText: "English",
-                totalItemsLabel: "Articles Totaux",
-                lowStockLabel: "Stock Faible",
-                outOfStockLabel: "Rupture de Stock",
-                totalValueLabel: "Valeur Totale",
-                addItemBtn: "Ajouter Article",
-                exportBtn: "Exporter",
-                allCategoriesOption: "Toutes Catégories",
-                allStockOption: "Tous Niveaux de Stock",
-                goodStockOption: "En Stock",
-                lowStockOption: "Stock Faible",
-                outOfStockOption: "Rupture de Stock",
-                itemHeader: "Nom Article",
-                categoryHeader: "Catégorie",
-                quantityHeader: "Quantité",
-                minStockHeader: "Stock Min",
-                priceHeader: "Prix",
-                supplierHeader: "Fournisseur",
-                enteredByHeader: "Saisi Par",
-                enteredDateHeader: "Date Ajout",
-                actionsHeader: "Actions",
-                emptyTitle: "Aucun article d'inventaire",
-                emptyText: "Ajoutez votre premier article pour commencer",
-                footerTagline: "Le savoir avec diligence. La technologie avec bienveillance.",
-                modalTitle: "Ajouter Nouvel Article",
-                modalTitleEdit: "Modifier Article",
-                nameLabel: "Nom de l'Article",
-                categoryLabel: "Catégorie",
-                quantityLabel: "Quantité Actuelle",
-                minStockLabel: "Niveau de Stock Minimum",
-                priceLabel: "Prix Unitaire",
-                supplierLabel: "Fournisseur",
-                enteredByLabel: "Saisi Par",
-                descriptionLabel: "Description",
-                cancelBtn: "Annuler",
-                saveBtn: "Sauvegarder",
-                editBtn: "Modifier",
-                deleteBtn: "Supprimer",
-                searchPlaceholder: "Rechercher inventaire..."
+                button1: '✅ Bouton 1 cliqué! JavaScript fonctionne.',
+                button2: '✅ Bouton 2 cliqué! Les événements fonctionnent.',
+                langTest: '✅ Langue changée en anglais!',
+                initial: 'Cliquez sur un bouton pour tester JavaScript...'
             }
         };
-
-        // Global variables
-        let currentLang = 'en';
-        let inventory = [];
-        let editingIndex = -1;
-        let isGoogleSheetsConnected = false;
-
-        // Initialize app
+        
+        function updateResult(message) {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = message;
+            testCount++;
+            console.log(`Test ${testCount}: ${message}`);
+        }
+        
+        function toggleLanguage() {
+            currentLang = currentLang === 'en' ? 'fr' : 'en';
+            updateResult(messages[currentLang].langTest);
+            
+            // Update button text
+            document.getElementById('testBtn3').textContent = 
+                currentLang === 'en' ? 'Language Test' : 'Test de Langue';
+        }
+        
+        // Wait for DOM to be ready
         document.addEventListener('DOMContentLoaded', function() {
-            loadLanguage();
-            loadSampleData();
-            updateStats();
-            setupEventListeners();
-            document.getElementById('currentYear').textContent = new Date().getFullYear();
+            console.log('🎯 DOM loaded, setting up event listeners...');
+            
+            document.getElementById('testBtn1').addEventListener('click', function() {
+                updateResult(messages[currentLang].button1);
+            });
+            
+            document.getElementById('testBtn2').addEventListener('click', function() {
+                updateResult(messages[currentLang].button2);
+            });
+            
+            document.getElementById('testBtn3').addEventListener('click', toggleLanguage);
+            
+            console.log('✅ All event listeners attached successfully!');
         });
-
-        // Language functions
-        function toggleLanguage() {
-            currentLang = currentLang === 'en' ? 'fr' : 'en';
-            loadLanguage();
-            localStorage.setItem('komkom_inventory_lang', currentLang);
-        }
-
-        function loadLanguage() {
-            const saved = localStorage.getItem('komkom_inventory_lang');
-            if (saved) currentLang = saved;
-            
-            document.documentElement.lang = currentLang;
-            
-            Object.keys(translations[currentLang]).forEach(key => {
-                const element = document.getElementById(key);
-                if (element) {
-                    if (element.tagName === 'INPUT' && element.type === 'text') {
-                        element.placeholder = translations[currentLang][key];
-                    } else {
-                        element.textContent = translations[currentLang][key];
-                    }
-                }
-            });
-            
-            document.getElementById('searchBox').placeholder = translations[currentLang].searchPlaceholder;
-        }
-
-        // Event listeners
-        function setupEventListeners() {
-            document.getElementById('searchBox').addEventListener('input', filterInventory);
-            document.getElementById('categoryFilter').addEventListener('change', filterInventory);
-            document.getElementById('stockFilter').addEventListener('change', filterInventory);
-            document.getElementById('itemForm').addEventListener('submit', saveItem);
-            
-            // Google Auth button
-            document.getElementById('authBtn').addEventListener('click', function() {
-                // Simulate Google Sheets connection
-                isGoogleSheetsConnected = !isGoogleSheetsConnected;
-                updateAuthStatus();
-            });
-        }
-
-        // Google Sheets simulation
-        function updateAuthStatus() {
-            const authBtn = document.getElementById('authBtn');
-            const authStatus = document.getElementById('authStatus');
-            
-            if (isGoogleSheetsConnected) {
-                authBtn.innerHTML = '✓ <span>' + translations[currentLang].authConnected + '</span>';
-                authBtn.style.background = '#2ecc71';
-                authStatus.textContent = translations[currentLang].authStatusConnected;
-                authStatus.style.color = '#2ecc71';
-            } else {
-                authBtn.innerHTML = '📊 <span>' + translations[currentLang].authText + '</span>';
-                authBtn.style.background = '#ffd700';
-                authBtn.style.color = '#1e3c72';
-                authStatus.textContent = translations[currentLang].authStatus;
-                authStatus.style.color = '#6c757d';
-            }
-        }
-
-        // Language functions
-        function toggleLanguage() {
-            currentLang = currentLang === 'en' ? 'fr' : 'en';
-            loadLanguage();
-            localStorage.setItem('komkom_inventory_lang', currentLang);
-        }
-
-        function loadLanguage() {
-            const saved = localStorage.getItem('komkom_inventory_lang');
-            if (saved) currentLang = saved;
-            
-            document.documentElement.lang = currentLang;
-            
-            Object.keys(translations[currentLang]).forEach(key => {
-                const element = document.getElementById(key);
-                if (element) {
-                    if (element.tagName === 'INPUT' && element.type === 'text') {
-                        element.placeholder = translations[currentLang][key];
-                    } else {
-                        element.textContent = translations[currentLang][key];
-                    }
-                }
-            });
-            
-            document.getElementById('searchBox').placeholder = translations[currentLang].searchPlaceholder;
-        }
-
-        // Sample data
-        function loadSampleData() {
-            inventory = [
-                {
-                    id: 1,
-                    name: "Laptop Dell XPS 13",
-                    category: "Electronics",
-                    quantity: 15,
-                    minStock: 5,
-                    price: 999.99,
-                    supplier: "Dell Canada",
-                    description: "High-performance laptop",
-                    enteredBy: "John Smith",
-                    dateAdded: "2024-01-15T10:30:00"
-                },
-                {
-                    id: 2,
-                    name: "Office Chair",
-                    category: "Furniture",
-                    quantity: 3,
-                    minStock: 5,
-                    price: 299.99,
-                    supplier: "Staples",
-                    description: "Ergonomic office chair",
-                    enteredBy: "Marie Dubois",
-                    dateAdded: "2024-01-14T14:22:00"
-                },
-                {
-                    id: 3,
-                    name: "Wireless Mouse",
-                    category: "Electronics",
-                    quantity: 0,
-                    minStock: 10,
-                    price: 29.99,
-                    supplier: "Best Buy",
-                    description: "Bluetooth wireless mouse",
-                    enteredBy: "Ahmed Hassan",
-                    dateAdded: "2024-01-13T09:15:00"
-                },
-                {
-                    id: 4,
-                    name: "A4 Paper",
-                    category: "Office Supplies",
-                    quantity: 50,
-                    minStock: 20,
-                    price: 5.99,
-                    supplier: "Costco",
-                    description: "White copy paper, 500 sheets",
-                    enteredBy: "Sarah Johnson",
-                    dateAdded: "2024-01-12T16:45:00"
-                }
-            ];
-            
-            renderInventory();
-            updateStats();
-            populateFilters();
-        }
-                    price: 29.99,
-                    supplier: "Best Buy",
-                    description: "Bluetooth wireless mouse"
-                },
-                {
-                    id: 4,
-                    name: "A4 Paper",
-                    category: "Office Supplies",
-                    quantity: 50,
-                    minStock: 20,
-                    price: 5.99,
-                    supplier: "Costco",
-                    description: "White copy paper, 500 sheets"
-                }
-            ];
-            
-            renderInventory();
-            updateStats();
-            populateFilters();
-        }
-
-        // Render inventory
-        function renderInventory(filteredInventory = null) {
-            const list = document.getElementById('inventoryList');
-            const items = filteredInventory || inventory;
-            
-            if (items.length === 0) {
-                list.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-state-icon">📦</div>
-                        <h3>${translations[currentLang].emptyTitle}</h3>
-                        <p>${translations[currentLang].emptyText}</p>
-                    </div>
-                `;
-                return;
-            }
-            
-            list.innerHTML = items.map((item, index) => {
-                const stockClass = item.quantity === 0 ? 'out-of-stock' : 
-                                 item.quantity <= item.minStock ? 'low-stock' : '';
-                
-                const stockLevel = item.quantity === 0 ? 'out' : 
-                                 item.quantity <= item.minStock ? 'low' : 'good';
-                
-                const dateAdded = new Date(item.dateAdded).toLocaleDateString(
-                    currentLang === 'fr' ? 'fr-FR' : 'en-US'
-                );
-                
-                return `
-                    <div class="grid-row ${stockClass}">
-                        <div class="item-name">${item.name}</div>
-                        <div><span class="category-tag">${item.category}</span></div>
-                        <div class="stock-level ${stockLevel}">${item.quantity}</div>
-                        <div>${item.minStock}</div>
-                        <div>${item.price.toFixed(2)}</div>
-                        <div>${item.supplier}</div>
-                        <div style="font-size: 12px; color: #6c757d;">${item.enteredBy}</div>
-                        <div style="font-size: 12px; color: #6c757d;">${dateAdded}</div>
-                        <div>
-                            <button class="btn btn-warning" onclick="editItem(${inventory.indexOf(item)})" style="padding: 5px 10px; font-size: 12px;">
-                                ${translations[currentLang].editBtn}
-                            </button>
-                            <button class="btn btn-danger" onclick="deleteItem(${inventory.indexOf(item)})" style="padding: 5px 10px; font-size: 12px; margin-left: 5px;">
-                                ${translations[currentLang].deleteBtn}
-                            </button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // Statistics
-        function updateStats() {
-            const totalItems = inventory.length;
-            const lowStockItems = inventory.filter(item => item.quantity <= item.minStock && item.quantity > 0).length;
-            const outOfStockItems = inventory.filter(item => item.quantity === 0).length;
-            const totalValue = inventory.reduce((sum, item) => sum + (item.quantity * item.price), 0);
-            
-            document.getElementById('totalItems').textContent = totalItems;
-            document.getElementById('lowStockItems').textContent = lowStockItems;
-            document.getElementById('outOfStockItems').textContent = outOfStockItems;
-            document.getElementById('totalValue').textContent = '$' + totalValue.toFixed(2);
-        }
-
-        // Filters
-        function populateFilters() {
-            const categories = [...new Set(inventory.map(item => item.category))];
-            const categoryFilter = document.getElementById('categoryFilter');
-            
-            categoryFilter.innerHTML = `<option value="">${translations[currentLang].allCategoriesOption}</option>` +
-                categories.map(cat => `<option value="${cat}">${cat}</option>`).join('');
-        }
-
-        function filterInventory() {
-            const searchTerm = document.getElementById('searchBox').value.toLowerCase();
-            const categoryFilter = document.getElementById('categoryFilter').value;
-            const stockFilter = document.getElementById('stockFilter').value;
-            
-            let filtered = inventory.filter(item => {
-                const matchesSearch = item.name.toLowerCase().includes(searchTerm) ||
-                                    item.category.toLowerCase().includes(searchTerm) ||
-                                    item.supplier.toLowerCase().includes(searchTerm);
-                
-                const matchesCategory = !categoryFilter || item.category === categoryFilter;
-                
-                let matchesStock = true;
-                if (stockFilter === 'good') matchesStock = item.quantity > item.minStock;
-                else if (stockFilter === 'low') matchesStock = item.quantity <= item.minStock && item.quantity > 0;
-                else if (stockFilter === 'out') matchesStock = item.quantity === 0;
-                
-                return matchesSearch && matchesCategory && matchesStock;
-            });
-            
-            renderInventory(filtered);
-        }
-
-        // Modal functions
-        function openModal(action, index = -1) {
-            const modal = document.getElementById('itemModal');
-            const modalTitle = document.getElementById('modalTitle');
-            const form = document.getElementById('itemForm');
-            
-            editingIndex = index;
-            
-            if (action === 'addItem') {
-                modalTitle.textContent = translations[currentLang].modalTitle;
-                form.reset();
-                // Set current user name (in real implementation, this would come from auth)
-                document.getElementById('itemEnteredBy').value = getCurrentUser();
-            } else if (action === 'editItem' && index >= 0) {
-                modalTitle.textContent = translations[currentLang].modalTitleEdit;
-                const item = inventory[index];
-                
-                document.getElementById('itemName').value = item.name;
-                document.getElementById('itemCategory').value = item.category;
-                document.getElementById('itemQuantity').value = item.quantity;
-                document.getElementById('itemMinStock').value = item.minStock;
-                document.getElementById('itemPrice').value = item.price;
-                document.getElementById('itemSupplier').value = item.supplier;
-                document.getElementById('itemEnteredBy').value = item.enteredBy;
-                document.getElementById('itemDescription').value = item.description || '';
-            }
-            
-            modal.classList.add('show');
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('itemModal');
-            modal.classList.remove('show');
-            editingIndex = -1;
-        }
-
-        // Item management
-        function getCurrentUser() {
-            // In a real implementation, this would get the current user from authentication
-            // For demo, we'll rotate through sample users
-            const users = ['John Smith', 'Marie Dubois', 'Ahmed Hassan', 'Sarah Johnson', 'Lisa Chen'];
-            return users[Math.floor(Math.random() * users.length)];
-        }
-
-        function saveItem(e) {
-            e.preventDefault();
-            
-            const now = new Date().toISOString();
-            
-            const item = {
-                id: editingIndex >= 0 ? inventory[editingIndex].id : Date.now(),
-                name: document.getElementById('itemName').value,
-                category: document.getElementById('itemCategory').value,
-                quantity: parseInt(document.getElementById('itemQuantity').value),
-                minStock: parseInt(document.getElementById('itemMinStock').value),
-                price: parseFloat(document.getElementById('itemPrice').value),
-                supplier: document.getElementById('itemSupplier').value,
-                enteredBy: document.getElementById('itemEnteredBy').value,
-                description: document.getElementById('itemDescription').value,
-                dateAdded: editingIndex >= 0 ? inventory[editingIndex].dateAdded : now,
-                lastModified: now
-            };
-            
-            if (editingIndex >= 0) {
-                inventory[editingIndex] = item;
-            } else {
-                inventory.push(item);
-            }
-            
-            // Simulate Google Sheets sync
-            if (isGoogleSheetsConnected) {
-                syncToGoogleSheets();
-            }
-            
-            renderInventory();
-            updateStats();
-            populateFilters();
-            closeModal();
-            
-            // Show success message
-            showNotification(editingIndex >= 0 ? 
-                (currentLang === 'en' ? 'Item updated successfully!' : 'Article mis à jour avec succès!') :
-                (currentLang === 'en' ? 'Item added successfully!' : 'Article ajouté avec succès!')
-            );
-        }
-
-        function editItem(index) {
-            openModal('editItem', index);
-        }
-
-        function deleteItem(index) {
-            const item = inventory[index];
-            const confirmMessage = currentLang === 'en' ? 
-                `Are you sure you want to delete "${item.name}"?` :
-                `Êtes-vous sûr de vouloir supprimer "${item.name}"?`;
-            
-            if (confirm(confirmMessage)) {
-                inventory.splice(index, 1);
-                
-                // Simulate Google Sheets sync
-                if (isGoogleSheetsConnected) {
-                    syncToGoogleSheets();
-                }
-                
-                renderInventory();
-                updateStats();
-                populateFilters();
-                
-                showNotification(currentLang === 'en' ? 
-                    'Item deleted successfully!' : 'Article supprimé avec succès!'
-                );
-            }
-        }
-
-        // Export functionality
-        function exportData() {
-            const headers = [
-                'Item Name', 'Category', 'Quantity', 'Min Stock', 'Price', 'Supplier', 'Entered By', 'Date Added', 'Description'
-            ];
-            
-            const csvContent = [
-                headers.join(','),
-                ...inventory.map(item => [
-                    `"${item.name}"`,
-                    `"${item.category}"`,
-                    item.quantity,
-                    item.minStock,
-                    item.price,
-                    `"${item.supplier}"`,
-                    `"${item.enteredBy}"`,
-                    `"${new Date(item.dateAdded).toLocaleString()}"`,
-                    `"${item.description || ''}"`
-                ].join(','))
-            ].join('\n');
-            
-            const blob = new Blob([csvContent], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `inventory_${new Date().toISOString().split('T')[0]}.csv`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            window.URL.revokeObjectURL(url);
-            
-            showNotification(currentLang === 'en' ? 
-                'Inventory exported successfully!' : 'Inventaire exporté avec succès!'
-            );
-        }
-
-        // Google Sheets simulation
-        function syncToGoogleSheets() {
-            // This would normally use the Google Sheets API
-            console.log('Syncing to Google Sheets...', inventory);
-            
-            // Simulate API call delay
-            setTimeout(() => {
-                showNotification(currentLang === 'en' ? 
-                    'Data synced to Google Sheets!' : 'Données synchronisées avec Google Sheets!'
-                );
-            }, 1000);
-        }
-
-        // Notification system
-        function showNotification(message) {
-            // Create notification element
-            const notification = document.createElement('div');
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: #2ecc71;
-                color: white;
-                padding: 15px 20px;
-                border-radius: 8px;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-                z-index: 2000;
-                font-weight: 600;
-                animation: slideInRight 0.3s ease;
-            `;
-            notification.textContent = message;
-            
-            // Add animation
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes slideInRight {
-                    from {
-                        transform: translateX(100%);
-                        opacity: 0;
-                    }
-                    to {
-                        transform: translateX(0);
-                        opacity: 1;
-                    }
-                }
-            `;
-            document.head.appendChild(style);
-            
-            document.body.appendChild(notification);
-            
-            // Remove after 3 seconds
-            setTimeout(() => {
-                notification.style.animation = 'slideInRight 0.3s ease reverse';
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                    document.head.removeChild(style);
-                }, 300);
-            }, 3000);
-        }
-
-        // Click outside modal to close
-        document.addEventListener('click', function(e) {
-            const modal = document.getElementById('itemModal');
-            if (e.target === modal) {
-                closeModal();
-            }
+        
+        // Additional debug info
+        window.addEventListener('load', function() {
+            console.log('📄 Page fully loaded');
+            console.log('🌐 User Agent:', navigator.userAgent);
+            console.log('📍 URL:', window.location.href);
         });
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                closeModal();
-            }
-            if (e.ctrlKey && e.key === 'n') {
-                e.preventDefault();
-                openModal('addItem');
-            }
+        
+        // Error handling
+        window.addEventListener('error', function(e) {
+            console.error('❌ JavaScript Error:', e.error);
+            updateResult('❌ JavaScript Error: ' + e.message);
         });
     </script>
 </body>
